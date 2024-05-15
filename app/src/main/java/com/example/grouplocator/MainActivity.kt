@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     Column {
                         Greeting("Afiq")
                         UpcomingEvents()
+                        BottomNavBar()
                     }
                 }
             }
