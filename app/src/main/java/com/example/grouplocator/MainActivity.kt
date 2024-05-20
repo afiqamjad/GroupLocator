@@ -27,51 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GroupLocatorTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column {
-                        Greeting("Afiq")
-                        UpcomingEvents()
-                        BottomNavBar()
-                    }
-                }
+                BottomNavBar()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Welcome Back, $name!",
-        modifier = modifier
-            .padding(20.dp, 20.dp, 0.dp, 20.dp),
-        fontSize = 30.sp
-    )
-}
-
-@Composable
-fun UpcomingEvents(modifier: Modifier = Modifier) {
-    Card (
-        modifier = modifier
-            .padding(10.dp)
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-    ){
-        Text(text = "Scheduled Events",
-            Modifier.padding(10.dp),
-            fontWeight = FontWeight.Bold)
-        Text(text = "No events scheduled! Add one now!", Modifier.padding(10.dp, 0.dp, 10.dp, 10.dp))
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GroupLocatorTheme {
-        Greeting("Android")
     }
 }

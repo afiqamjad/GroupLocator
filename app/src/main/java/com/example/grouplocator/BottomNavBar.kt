@@ -22,12 +22,8 @@ fun BottomNavBar() {
     Scaffold (
         bottomBar = {
             BotNav(navController, bottomNavItems)
-        },
-        content = { padding ->
-            Column {
-                Modifier.padding(padding)
-                NavConfig(navController)
-            }
         }
-    )
+    ) { innerPadding ->
+        NavConfig(navController, Modifier.padding(innerPadding))
+    }
 }
