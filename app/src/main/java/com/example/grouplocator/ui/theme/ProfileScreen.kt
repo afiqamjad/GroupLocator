@@ -1,12 +1,14 @@
 package com.example.grouplocator.ui.theme
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +23,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,18 +64,22 @@ fun ProfileScreen() {
     )
     Column(modifier = Modifier
         .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
         ) {
         ProfilePicture()
         Username(username = "afiqkhairir")
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "Past Events",
                 fontSize = 24.sp,
-                modifier = Modifier.padding(start = 15.dp, end = 0.dp, top = 25.dp, bottom = 4.dp),
+                modifier = Modifier.padding(start = 15.dp, end = 0.dp, top = 15.dp, bottom = 4.dp),
                 fontWeight = FontWeight.SemiBold
             )
             PastEventsList(events = events)
+        }
+        LogoutButton  {
+            println("Hello")
         }
     }
 }
@@ -146,6 +155,29 @@ fun PastEventsList(events: List<Event>) {
                 PastEventsCard(event = event)
             }
         }
+    }
+}
+
+@Composable
+fun LogoutButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.LightGray,
+            contentColor = Color.Black
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 8.dp,
+            pressedElevation = 12.dp,
+            disabledElevation = 0.dp
+        ),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 25.dp)
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        Text(text = "Logout", fontSize = 18.sp)
     }
 }
 
