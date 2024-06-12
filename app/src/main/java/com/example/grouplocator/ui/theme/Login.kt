@@ -90,7 +90,7 @@ fun LoginButton(onClick: () -> Unit) {
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 25.dp)
+            .padding(start = 46.dp, end = 46.dp, bottom = 15.dp)
             .fillMaxWidth()
             .height(50.dp)
     ) {
@@ -113,7 +113,7 @@ fun SignUpButton(onClick: () -> Unit) {
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 25.dp)
+            .padding(start = 46.dp, end = 46.dp, bottom = 25.dp)
             .fillMaxWidth()
             .height(50.dp)
     ) {
