@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,12 +27,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.grouplocator.viewmodel.UserViewModel
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(userViewModel: UserViewModel = viewModel()) {
     val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    var isAuthenticated by remember { mutableStateOf(false) }
 
     Column (modifier = Modifier
         .fillMaxSize(),
@@ -47,12 +52,16 @@ fun LoginScreen() {
             modifier = Modifier
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp, bottom = 25.dp))
-        LoginButton(email = email.value, password = password.value, onClick = { submittedEmail, submittedPassword ->
-            Toast.makeText(context, "Login Button Clicked! Email: $submittedEmail, Password: $submittedPassword", Toast.LENGTH_SHORT).show()
-        })
-        SignUpButton (email = email.value, onClick = {
-            Toast.makeText(context, "Sign Up Button Clicked!", Toast.LENGTH_SHORT).show()
-        })
+        LoginButton{
+            userViewModel.authenticateUser(email.value, password.value) { success ->
+                isAuthenticated = success
+                Toast.makeText(context, if (success) "Login Successful" else "Login Failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        SignUpButton{
+            userViewModel.registerUser(email.value, password.value)
+            Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
@@ -80,9 +89,9 @@ fun PasswordBox(password: String, onPasswordChange: (String) -> Unit, modifier: 
 }
 
 @Composable
-fun LoginButton(email: String, password: String, onClick: (String, String) -> Unit) {
+fun LoginButton(onClick: () -> Unit) {
     Button(
-        onClick = { onClick(email, password) },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
             contentColor = Color.Black
@@ -103,9 +112,9 @@ fun LoginButton(email: String, password: String, onClick: (String, String) -> Un
 }
 
 @Composable
-fun SignUpButton(email: String, onClick: (String) -> Unit) {
+fun SignUpButton(onClick: () -> Unit) {
     Button(
-        onClick = { onClick(email) },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
             contentColor = Color.Black
