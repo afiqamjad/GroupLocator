@@ -4,6 +4,12 @@ import org.mindrot.jbcrypt.BCrypt
 
 class UserRepository(private val userDao: UserDao) {
     suspend fun registerUser(email: String, password: String): Result<Unit> {
+        if (email.isBlank()) {
+            return Result.failure(Exception("Email cannot be blank"))
+        }
+        if (password.isBlank()) {
+            return Result.failure(Exception("Password cannot be blank"))
+        }
         val existingUser = userDao.getUserByEmail(email)
         if (existingUser != null) {
             return Result.failure(Exception("User with this email already exists"))
