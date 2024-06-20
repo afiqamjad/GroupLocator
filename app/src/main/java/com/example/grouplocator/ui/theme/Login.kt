@@ -29,32 +29,38 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LoginScreen() {
     val context = LocalContext.current
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+
     Column (modifier = Modifier
         .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center){
-        EmailBox(modifier = Modifier
+        EmailBox(
+            email = email.value,
+            onEmailChange = { email.value = it },
+            modifier = Modifier
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp))
-        PasswordBox(modifier = Modifier
+        PasswordBox(password = password.value,
+            onPasswordChange = { password.value = it },
+            modifier = Modifier
             .fillMaxWidth()
             .padding(start = 15.dp, end = 15.dp, bottom = 25.dp))
-        LoginButton {
-            Toast.makeText(context, "Login Button Clicked!", Toast.LENGTH_SHORT).show()
-        }
-        SignUpButton {
+        LoginButton(email = email.value, password = password.value, onClick = { submittedEmail, submittedPassword ->
+            Toast.makeText(context, "Login Button Clicked! Email: $submittedEmail, Password: $submittedPassword", Toast.LENGTH_SHORT).show()
+        })
+        SignUpButton (email = email.value, onClick = {
             Toast.makeText(context, "Sign Up Button Clicked!", Toast.LENGTH_SHORT).show()
-        }
+        })
     }
 }
 
 @Composable
-fun EmailBox(modifier: Modifier) {
-    val email = remember { mutableStateOf("") }
-
+fun EmailBox(email: String, onEmailChange: (String) -> Unit, modifier: Modifier) {
     OutlinedTextField(
-        value = email.value,
-        onValueChange = { email.value = it },
+        value = email,
+        onValueChange = onEmailChange,
         label = { Text("Email") },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
         modifier = modifier
@@ -62,12 +68,10 @@ fun EmailBox(modifier: Modifier) {
 }
 
 @Composable
-fun PasswordBox(modifier: Modifier) {
-    val password = remember { mutableStateOf("") }
-
+fun PasswordBox(password: String, onPasswordChange: (String) -> Unit, modifier: Modifier) {
     OutlinedTextField(
-        value = password.value,
-        onValueChange = { password.value = it },
+        value = password,
+        onValueChange = onPasswordChange,
         label = { Text("Password") },
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
         visualTransformation = PasswordVisualTransformation(),
@@ -76,9 +80,9 @@ fun PasswordBox(modifier: Modifier) {
 }
 
 @Composable
-fun LoginButton(onClick: () -> Unit) {
+fun LoginButton(email: String, password: String, onClick: (String, String) -> Unit) {
     Button(
-        onClick = onClick,
+        onClick = { onClick(email, password) },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
             contentColor = Color.Black
@@ -99,9 +103,9 @@ fun LoginButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun SignUpButton(onClick: () -> Unit) {
+fun SignUpButton(email: String, onClick: (String) -> Unit) {
     Button(
-        onClick = onClick,
+        onClick = { onClick(email) },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
             contentColor = Color.Black
