@@ -15,9 +15,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         userRepository = UserRepository(userDao)
     }
 
-    fun registerUser(email: String, password: String) {
+    fun registerUser(email: String, password: String, onResult: (Boolean, String) -> Unit) {
         viewModelScope.launch {
-            userRepository.registerUser(email, password)
+            val result = userRepository.registerUser(email, password)
+            if (result.isSuccess) {
+                onResult(true, "Registration successful")
+            } else {
+                onResult(false, result.exceptionOrNull()?.message ?: "Unknown error")
+            }
         }
     }
 

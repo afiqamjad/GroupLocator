@@ -36,6 +36,7 @@ fun LoginScreen(userViewModel: UserViewModel = viewModel()) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     var isAuthenticated by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf("") }
 
     Column (modifier = Modifier
         .fillMaxSize(),
@@ -58,10 +59,13 @@ fun LoginScreen(userViewModel: UserViewModel = viewModel()) {
                 Toast.makeText(context, if (success) "Login Successful" else "Login Failed", Toast.LENGTH_SHORT).show()
             }
         }
-        SignUpButton{
-            userViewModel.registerUser(email.value, password.value)
-            Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+        SignUpButton {
+            userViewModel.registerUser(email.value, password.value) { _, msg ->
+                message = msg
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            }
         }
+        Text(text = message)
     }
 }
 
